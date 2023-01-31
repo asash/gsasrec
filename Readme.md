@@ -1,4 +1,4 @@
-#This repository contains code for the paper "gSASRec: Reducing Overconfidence in Sequential Recommendation Trained with Negative Sampling"
+# This repository contains code for the paper "gSASRec: Reducing Overconfidence in Sequential Recommendation Trained with Negative Sampling"
 
 To setup the environment you can use `Dockerfile` from the `docker` folder and build the image with the help of docker build command:
 
