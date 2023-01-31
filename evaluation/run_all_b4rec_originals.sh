@@ -1,0 +1,7 @@
+sh run_n_experiments.sh configs/bert4rec_repro_paper/ml_1m_original_200000steps.py 
+sh run_n_experiments.sh configs/bert4rec_repro_paper/ml_1m_original_400000steps.py 
+sh run_n_experiments.sh configs/bert4rec_repro_paper/ml_1m_original_800000steps.py 
+sh run_n_experiments.sh configs/bert4rec_repro_paper/ml_1m_original_1600000steps.py 
+sh run_n_experiments.sh configs/bert4rec_repro_paper/ml_1m_original_3200000steps.py 
+sh run_n_experiments.sh configs/bert4rec_repro_paper/ml_1m_original_6400000steps.py 
+sh run_n_experiments.sh configs/bert4rec_repro_paper/ml_1m_original_12800000steps.py 

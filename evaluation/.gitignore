@@ -1,0 +1,7 @@
+booking_data/
+saved/
+.ipynb_checkpoints/
+a.out
+log_tensorboard
+.DS_Store
+._.DS_Store
