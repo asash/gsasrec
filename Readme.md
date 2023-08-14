@@ -20,7 +20,7 @@ docker build . -t  gsasrec
 
 Alternatively, the `Dockerfile` can be seen as a step-by-step instruction to set up the environment on your machine. 
 
-Our code is based on the `aprec` framework from a recent [reproducibility work](https://github.com/asash/bert4rec_repro), so you can use the original documentation to learn how to use the framework. 
+Our code is based on the `aprec` framework from our recent [reproducibility work](https://github.com/asash/bert4rec_repro), so you can use the original documentation to learn how to use the framework. 
 
 # Runnig experiments
 (instruction copied from the original repo)
