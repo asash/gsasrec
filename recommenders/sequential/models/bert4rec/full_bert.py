@@ -121,5 +121,9 @@ class FullBertModel(SequentialRecsysModel):
    
     def score_all_items(self, inputs): 
         sequence = inputs[0] 
-        sequence_embeddings  = self.bert(sequence, position_ids=self.position_ids_for_pred).last_hidden_state[:,-1]
-        return tf.einsum("ne, be -> bn", self.bert.embeddings.weight[:self.num_items], sequence_embeddings)
+        bert_output  = self.bert(sequence, position_ids=self.position_ids_for_pred, return_dict=True, output_hidden_states=True)
+        hidden_states = self.bert.mlm.predictions.transform(bert_output.hidden_states[-1])
+        embeddings = self.bert.bert.embeddings.weight
+        logits = tf.einsum("bse, ne -> bsn", hidden_states, embeddings)
+        logits = tf.nn.bias_add(logits, self.bert.mlm.predictions.bias)
+        return logits[:, -1,:-NUM_SPECIAL_ITEMS]
