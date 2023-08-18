@@ -87,6 +87,7 @@ class FullBertModel(SequentialRecsysModel):
         masked_sequences = inputs[0]
         labels = inputs[1]
         positions = inputs[2]
+        train = kwargs.get('training', False)
         batch_size = self.data_parameters.batch_size
         positive_idx = tf.expand_dims(tf.nn.relu(labels), -1) #avoid boundary problems, negative values will be filteret later anyway
         sample_num = tf.expand_dims(tf.tile(tf.expand_dims(tf.range(0, batch_size, dtype='int64'), -1), [1, self.sequence_length]), -1)
@@ -96,7 +97,7 @@ class FullBertModel(SequentialRecsysModel):
         use_mask = tf.tile(tf.expand_dims(tf.cast(labels!=-100,'float32'), -1),[1, 1, self.num_items + NUM_SPECIAL_ITEMS])
         ground_truth = tf.scatter_nd(indices, values, [batch_size, self.sequence_length, self.num_items + NUM_SPECIAL_ITEMS])
         ground_truth = use_mask*ground_truth + -100 * (1-use_mask)
-        bert_output = self.bert(masked_sequences, position_ids = positions, return_dict=True, output_hidden_states=True, labels=labels)
+        bert_output = self.bert(masked_sequences, position_ids = positions, return_dict=True, output_hidden_states=True, labels=labels, training=train)
         hidden_states = self.bert.mlm.predictions.transform(bert_output.hidden_states[-1])
         embeddings = self.bert.bert.embeddings.weight
         logits = tf.einsum("bse, ne -> bsn", hidden_states, embeddings)
