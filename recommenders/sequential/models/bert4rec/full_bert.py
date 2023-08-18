@@ -7,7 +7,7 @@ from aprec.losses.get_loss import listwise_loss_from_config
 from aprec.losses.loss import ListWiseLoss
 
 from aprec.recommenders.sequential.models.sequential_recsys_model import SequentialDataParameters, SequentialModelConfig, SequentialRecsysModel
-from transformers import BertConfig, TFBertMainLayer
+from transformers import BertConfig, TFBertMainLayer, TFBertForMaskedLM
 
 NUM_SPECIAL_ITEMS = 3 # +1 for mask item, +1 for padding, +1 for ignore_item
 
@@ -65,7 +65,7 @@ class FullBertModel(SequentialRecsysModel):
         )
         self.num_items = bert_config.vocab_size - NUM_SPECIAL_ITEMS 
         self.token_type_ids = tf.constant(tf.zeros(shape=(self.data_parameters.batch_size, bert_config.max_position_embeddings)))
-        self.bert = TFBertMainLayer(bert_config, add_pooling_layer=False)
+        self.bert = TFBertForMaskedLM(bert_config)
         self.loss_ = listwise_loss_from_config(self.model_parameters.loss, self.model_parameters.loss_parameters)
         self.loss_.set_num_items(self.num_items)
         self.loss_.set_batch_size(self.data_parameters.batch_size*self.data_parameters.sequence_length)
@@ -93,19 +93,21 @@ class FullBertModel(SequentialRecsysModel):
         sequence_pos = tf.expand_dims(tf.tile(tf.expand_dims(tf.range(0, self.sequence_length, dtype='int64'), 0), [batch_size, 1]), -1)
         indices = tf.concat([sample_num, sequence_pos, positive_idx], -1)
         values = tf.ones([batch_size, self.sequence_length])
-        use_mask = tf.tile(tf.expand_dims(tf.cast(labels!=-100,'float32'), -1),[1, 1, self.num_items])
-        ground_truth = tf.scatter_nd(indices, values, [batch_size, self.sequence_length, self.num_items])
+        use_mask = tf.tile(tf.expand_dims(tf.cast(labels!=-100,'float32'), -1),[1, 1, self.num_items + NUM_SPECIAL_ITEMS])
+        ground_truth = tf.scatter_nd(indices, values, [batch_size, self.sequence_length, self.num_items + NUM_SPECIAL_ITEMS])
         ground_truth = use_mask*ground_truth + -100 * (1-use_mask)
-
-        bert_output = self.bert(masked_sequences, position_ids = positions).last_hidden_state
-        embeddings = self.bert.embeddings.weight[:-NUM_SPECIAL_ITEMS]
-        logits = tf.einsum("bse, ne -> bsn", bert_output, embeddings)
-        return self.get_loss(ground_truth,logits)
+        bert_output = self.bert(masked_sequences, position_ids = positions, return_dict=True, output_hidden_states=True, labels=labels)
+        hidden_states = self.bert.mlm.predictions.transform(bert_output.hidden_states[-1])
+        embeddings = self.bert.bert.embeddings.weight
+        logits = tf.einsum("bse, ne -> bsn", hidden_states, embeddings)
+        logits = tf.nn.bias_add(logits, self.bert.mlm.predictions.bias)
+        loss=self.get_loss(ground_truth,logits)
+        return loss
 
     def get_loss(self, ground_truth, logits):
         num_masked_samples = tf.reduce_sum(tf.cast(ground_truth[:,:,0] != -100, 'float32'), -1)
         num_lists = self.data_parameters.batch_size * self.data_parameters.sequence_length
-        items_per_list = self.data_parameters.num_items
+        items_per_list = self.data_parameters.num_items + NUM_SPECIAL_ITEMS
         ground_truth = tf.reshape(ground_truth, (num_lists, items_per_list))
         logits = tf.reshape(logits, (num_lists, items_per_list))
         if self.num_samples_normalization:
