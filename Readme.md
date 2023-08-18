@@ -22,6 +22,15 @@ Alternatively, the `Dockerfile` can be seen as a step-by-step instruction to set
 
 Our code is based on the `aprec` framework from our recent [reproducibility work](https://github.com/asash/bert4rec_repro), so you can use the original documentation to learn how to use the framework. 
 
+## GSASrec info
+**gSASRec** is a SASRec-based code that utilises more negatives per positive and gBCE loss: 
+
+$$
+\begin{align}
+     \mathcal{L}^{\beta}_{gBCE} -\frac{1}{|I_k^-| + 1} \left( \log(\sigma^{\beta}(s_{i^+})) + \sum_{i \in I_k^{-}}\log(1-\sigma(s_i)) \right
+\end{align}
+$$
+
 # Runnig experiments
 (instruction copied from the original repo)
 
