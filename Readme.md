@@ -30,7 +30,7 @@ Our code is based on the `aprec` framework from our recent [reproducibility work
      \mathcal{L}^{\beta}_{gBCE} = -\frac{1}{|I_k^-| + 1} \left( \log(\sigma^{\beta}(s_{i^+})) + \sum_{i \in I_k^{-}}\log(1-\sigma(s_i)) \right)
 \end{align}
 ```
-where $`i^+`$ is the positive sample, $`I_k^-`$ is the set of negative samples, $`s_i`$ is the model's score for item $`i`$ and $`sigma`$ is the logistic sigmoid function. 
+where $`i^+`$ is the positive sample, $`I_k^-`$ is the set of negative samples, $`s_i`$ is the model's score for item $`i`$ and $`\sigma`$ is the logistic sigmoid function. 
 
 The $`\beta`$ parameter controls the model calibration level. Note that we do not specify beta directly and infer it from the calibration parameter $`t`$:
 
