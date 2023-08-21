@@ -5,6 +5,10 @@ import tensorflow as tf
 from aprec.recommenders.sequential.models.sequential_recsys_model import SequentialDataParameters, SequentialModelConfig, SequentialRecsysModel
 
 #https://arxiv.org/abs/1511.06939
+#The architecture of this model is inspired by the GRU4Rec paper
+#However, it does not reproduce the original training scheme etc. 
+#This model shouldn't be used to make any claims about original GRU4Rec performance. 
+
 class GRU4RecConfig(SequentialModelConfig):
     def __init__(self,
                  output_layer_activation='linear',
