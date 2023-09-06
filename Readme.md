@@ -2,7 +2,7 @@
 
 **Link to the paper:**[https://arxiv.org/pdf/2308.07192.pdf](https://arxiv.org/pdf/2308.07192.pdf)
 
-If you use this code from the repository please cite the work: 
+If you use this code from the repository, please cite the work: 
 ```
 @inproceedings{petrov2022recencysampling,
   title={gSASRec: Reducing Overconfidence in Sequential Recommendation Trained with Negative Sampling},
@@ -12,7 +12,7 @@ If you use this code from the repository please cite the work:
 }
 ```
 
-To setup the environment, you can use `Dockerfile` from the `docker` folder and build the image with the help of the docker build command:
+To set the environment, you can use `Dockerfile` from the `docker` folder and build the image with the help of the docker build command:
 
 ```
 docker build . -t  gsasrec
@@ -23,7 +23,7 @@ Alternatively, the `Dockerfile` can be seen as a step-by-step instruction to set
 Our code is based on the `aprec` framework from our recent [reproducibility work](https://github.com/asash/bert4rec_repro), so you can use the original documentation to learn how to use the framework. 
 
 ## GSASrec and GBCE info info
-**gSASRec** is a SASRec-based sequential recommendation modelthat utilises more negatives per positive and gBCE loss: 
+**gSASRec** is a SASRec-based sequential recommendation model that utilises more negatives per positive and gBCE loss: 
 
 ```math
 \begin{align}
@@ -43,7 +43,7 @@ Where $`\alpha`$ is the negative sampling rate: $`\frac{`|I_k^-|`}{|I| - 1}`$, a
 
 
 Two models' hyperparameters (in addition to standard SASRec's hyperparameters) are $`k`$ -- the number of negatives per positive, and $`t`$. We recommend using $`k = 256`$ and $`t=0.75`$.  
-However, if you want fully calibrated probabilities (e.g., not just to sort items but use these probabilities as an approximation for CTR), you should set $t=1.0$. In this case, model training will take longer but converge to realistic probabilities (see proofs and experiments in the paper). 
+However, if you want fully calibrated probabilities (e.g., not just to sort items but to use these probabilities as an approximation for CTR), you should set $t=1.0$. In this case, model training will take longer but converge to realistic probabilities (see proofs and experiments in the paper). 
 
  We do not implement gBCE explicitly. Instead, we use score positive conversion and then use the [standard BCE](losses/bce.py) loss: 
 ```math
@@ -80,7 +80,7 @@ The most important code part that you can re-use in other projects:
 ```
 The code of our gSASRec model is located in the file [recommenders/sequential/models/sasrec/sasrec.py](recommenders/sequential/models/sasrec/sasrec.py)
 
-### Note that when you use gBCE, the model may require some time to "kick off" training  and improve the results above simple models like popularity. 
+### Note that when you use gBCE, the model may require some time to "kick-off" training  and improve the results above simple models like popularity. 
 
 If you observe this pattern, consider increasing early stopping patience - the model eventually will start learning. Alternatively, consider decreasing t in gBCE to make task easier for the model. 
 
