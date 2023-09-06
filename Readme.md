@@ -4,7 +4,7 @@
 
 If you use this code from the repository, please cite the work: 
 ```
-@inproceedings{petrov2022recencysampling,
+@inproceedings{petrov2023gsasrec,
   title={gSASRec: Reducing Overconfidence in Sequential Recommendation Trained with Negative Sampling},
   author={Petrov, Aleksandr and Macdonald, Craig},
   booktitle={Seventeen ACM Conference on Recommender Systems},
