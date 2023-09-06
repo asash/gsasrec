@@ -12,6 +12,12 @@ If you use this code from the repository, please cite the work:
 }
 ```
 
+# Pytorch version
+If you are looking for a pytorch version of gSASRec, please use the official port:  [https://github.com/asash/gSASRec-pytorch/](https://github.com/asash/gSASRec-pytorch/)
+The pytorch version is independent of the aprec framework and may be easier to use outside. 
+
+# Environment setup
+
 To set the environment, you can use `Dockerfile` from the `docker` folder and build the image with the help of the docker build command:
 
 ```
