@@ -61,7 +61,7 @@ where
 
 Our SASRec code is based on the original SASRec code. 
 
-The most important code part, that you can re-use in other projects: 
+The most important code part that you can re-use in other projects: 
 
 ```python
   alpha = self.model_parameters.vanilla_num_negatives / (self.data_parameters.num_items - 1)
@@ -80,6 +80,9 @@ The most important code part, that you can re-use in other projects:
 ```
 The code of our gSASRec model is located in the file [recommenders/sequential/models/sasrec/sasrec.py](recommenders/sequential/models/sasrec/sasrec.py)
 
+### Note that when you use gBCE, the model may require some time to "kick off" training  and improve the results above simple models like popularity. 
+
+If you observe this pattern, consider increasing early stopping patience - the model eventually will start learning. Alternatively, consider decreasing t in gBCE to make task easier for the model. 
 
 # Runnig experiments
 (instruction copied from the original repo)
