@@ -29,7 +29,7 @@ Alternatively, the `Dockerfile` can be seen as a step-by-step instruction to set
 
 Our code is based on the `aprec` framework from our recent [reproducibility work](https://github.com/asash/bert4rec_repro), so you can use the original documentation to learn how to use the framework. 
 
-## gSASrec and gBCE info info
+## gSASrec and gBCE info
 **gSASRec** is a SASRec-based sequential recommendation model that utilises more negatives per positive and gBCE loss: 
 
 ```math
